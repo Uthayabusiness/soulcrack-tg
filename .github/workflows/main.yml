@@ -11,4 +11,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - run: chmod +x *
-    - run: sudo ./mustafa 20.204.148.51 14431 60 51 999
+    - run: sudo ./mustafa 20.204.148.51 14431 5 51 999
