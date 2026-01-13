@@ -21,4 +21,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - run: chmod +x *
-    - run: sudo ./soul ${{ github.event.inputs.ip }} ${{ github.event.inputs.port }} ${{ github.event.inputs.time }}
+    - run: sudo ./soul ${{ github.event.inputs.ip }} ${{ github.event.inputs.port }} ${{ github.event.inputs.time }} 999
