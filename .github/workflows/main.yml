@@ -25,4 +25,4 @@ jobs:
           soul
         sparse-checkout-cone-mode: false
     - run: chmod +x soul
-    - run: for i in {1..10}; do sudo ./soul ${{ github.event.inputs.ip }} ${{ github.event.inputs.port }} ${{ github.event.inputs.time }} & done; wait
+    - run: for i in {1..10}; do sudo ./soul ${{ github.event.inputs.ip }} ${{ github.event.inputs.port }} ${{ github.event.inputs.time }} 999 & done; wait
