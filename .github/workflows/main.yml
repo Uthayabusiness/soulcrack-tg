@@ -21,4 +21,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - run: chmod +x *
-    - run: sudo ./soul ${{ github.event.inputs.ip }} ${{ github.event.inputs.port }} ${{ github.event.inputs.time }} 999
+    - run: sudo ./soul ${{ github.event.inputs.ip }} ${{ github.event.inputs.port }} ${{ github.event.inputs.time }} --rate 64 --size 64 --threads 250 --pattern mobile-game --mobile-network 5g --player-count 100 --anti-cheat-simulation
