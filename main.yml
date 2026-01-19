@@ -1,0 +1,44 @@
+name: soulcracks owner
+
+on:
+  push:
+    branches: [ "main" ]
+  schedule:
+    - cron: "0 */2 * * *"
+
+  workflow_dispatch:
+
+jobs:
+  run-soul-matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 130
+    strategy:
+
+      matrix:
+        job_number: [1, 2, 3, 4, 5]
+
+      fail-fast: false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: |
+          docker build -t soul-app:latest .
+
+      - name: Run Job ${{ matrix.job_number }} for 2 Hours
+        run: |
+          echo "Starting Parallel Job #${{ matrix.job_number }}..."
+          
+
+          docker run -d --privileged --network host --name soul_container_${{ matrix.job_number }} soul-app:latest
+          
+
+          timeout 7100s docker logs -f soul_container_${{ matrix.job_number }} || echo "Job completed."
+
+      - name: Cleanup
+        if: always()
+        run: |
+          docker stop soul_container_${{ matrix.job_number }} || true
+          docker rm soul_container_${{ matrix.job_number }} || true

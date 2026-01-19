@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  soul-service:
+    build: .
+    container_name: soul_app_container
+    restart: always
+    privileged: true
+    network_mode: "host"
+    stdin_open: true
+    tty: true
